@@ -29,24 +29,36 @@ function lovr.draw()
   shader:send('zephyrView', viewport.viewMatrix:inverse())
   shader:send('ambientColor', { .5, .5, .5 })
 
-  level:draw()
-  editor:draw()
+	if editor.active then
+  	editor:draw()
+	else
+		level:draw()
+	end
 end
 
 function lovr.controlleradded()
-  editor:refreshControllers()
+	if editor.active then editor:refreshControllers() end
 end
 
 function lovr.controllerremoved()
-  editor:refreshControllers()
+	if editor.active then editor:refreshControllers() end
 end
 
 function lovr.controllerpressed(...)
-  editor:controllerpressed(...)
+	lovr.toggleEditor(...)
+	if editor.active then editor:controllerpressed(...) end
+end
+
+function lovr.toggleEditor(controller, button)
+	if button == 'b' and editor.active then
+		editor.active = false
+	elseif button == 'b' then
+		editor.active = true
+	end
 end
 
 function lovr.controllerreleased(...)
-  editor:controllerreleased(...)
+	if editor.active then editor:controllerreleased(...) end
 end
 
 function lovr.quit()

@@ -119,13 +119,13 @@ function Editor:controllerpressed(controller, button)
     end
   end
 
-  if button == 'menu' or button == 'y' and not self.menu.active then
-    self.menu.active = true
-    self.menu.controller = controller
-    self:setSatchelItems()
-elseif button =='menu' or button == 'y' then
-    self.menu.active = false
-  end
+	if button == 'menu' or button == 'y' and not self.menu.active then
+		self.menu.active = true
+		self.menu.controller = controller
+		self:setSatchelItems()
+	elseif button =='menu' or button == 'y' then
+		self.menu.active = false
+	end
 end
 
 function Editor:controllerreleased(controller, button)
