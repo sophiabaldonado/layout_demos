@@ -45,7 +45,7 @@ function level:addEntity(entityData)
 end
 
 function level:draw()
-	self.room:draw(0, 0, 0, 5)
+	self.room:draw(0, 0, 0, 6)
   for i, entity in ipairs(self.data.entities) do
     local lerped = self:lerp(entity)
     local t = entity.transform

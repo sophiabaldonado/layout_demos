@@ -11,6 +11,7 @@ Editor.headPosition = vector()
 function Editor:init(level)
   self.active = false
   self:refreshControllers()
+	self.abstractController = lovr.graphics.newModel('art/controller.obj')
   self.level = level
   self.isDirty = false
   self.lastChange = lovr.timer.getTime()
@@ -55,7 +56,7 @@ function Editor:draw()
       lovr.graphics.setColor(255, 255, 255)
     end
 
-    lovr.graphics.cube('fill', x, y, z, .005, controller.object:getOrientation())
+    self.abstractController:draw(x, y, z, .5, controller.object:getOrientation())
 
     if controller.rotate.active then
       lovr.graphics.setColor(255, 255, 255)
