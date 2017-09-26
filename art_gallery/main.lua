@@ -42,7 +42,7 @@ function lovr.draw()
 		level:draw()
 	end
 
-	--drawToggler()
+	drawToggler()
 end
 
 function lovr.controlleradded()
@@ -108,9 +108,9 @@ function openEditor()
 end
 
 function drawToggler()
-	local texture = 'art/'..toggle.button..'.png'
-	local x, y, z, size, angle, ax, ay, az =
-	lovr.graphics.plane(texture, x, y, z, size, angle, ax, ay, az)
+	local texturePath = 'art/'..toggle.button..'.png'
+	local texture = lovr.graphics.newTexture(texturePath)
+	lovr.graphics.plane(texture, 1, 1.5, z, .25)
 end
 
 function lovr.controllerreleased(...)
