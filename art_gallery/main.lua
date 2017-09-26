@@ -1,6 +1,10 @@
 local editor = require 'editor'
 local level = require 'level'
 local net = require 'net'
+local maf = require 'maf'
+
+local vector = maf.vector
+local quaternion = maf.quat
 
 viewport = {
   viewMatrix = lovr.math.newTransform()
@@ -50,10 +54,10 @@ function lovr.controllerremoved()
 end
 
 function lovr.refreshControllers()
-  self.controllers = {}
+  local controllers = {}
 
   for i, controller in ipairs(lovr.headset.getControllers()) do
-    self.controllers[controller] = {
+    controllers[controller] = {
       index = i,
       object = controller,
       model = controller:newModel(),
@@ -76,7 +80,7 @@ function lovr.refreshControllers()
         counter = 0
       }
     }
-    table.insert(self.controllers, self.controllers[controller])
+    table.insert(controllers, controllers[controller])
   end
 end
 
