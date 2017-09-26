@@ -8,7 +8,7 @@ local position = vector()
 
 function level:init(filename)
   self:load(filename)
-
+	self.room = lovr.graphics.newModel('art/room.obj')
   for i, entity in ipairs(self.data.entities) do
     entity.index = i
     entity.model = entity.texturePath and lovr.graphics.newModel(entity.modelPath, entity.texturePath) or lovr.graphics.newModel(entity.modelPath)
@@ -45,6 +45,7 @@ function level:addEntity(entityData)
 end
 
 function level:draw()
+	self.room:draw(0, 0, 0, 5)
   for i, entity in ipairs(self.data.entities) do
     local lerped = self:lerp(entity)
     local t = entity.transform
