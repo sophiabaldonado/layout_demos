@@ -13,6 +13,8 @@ function lovr.load()
   lovr.graphics.setBackgroundColor(20, 20, 25)
   lovr.headset.setClipDistance(.01, 21)
 	net:init()
+
+	toggle = { button = 'stop' }
 end
 
 function lovr.update(dt)
@@ -31,30 +33,80 @@ function lovr.draw()
 
 	if editor.active then
   	editor:draw()
+		level:draw()
 	else
 		level:draw()
 	end
+
+	--drawToggler()
 end
 
 function lovr.controlleradded()
-	if editor.active then editor:refreshControllers() end
+	lovr.refreshControllers()
 end
 
 function lovr.controllerremoved()
-	if editor.active then editor:refreshControllers() end
+	lovr.refreshControllers()
+end
+
+function lovr.refreshControllers()
+  self.controllers = {}
+
+  for i, controller in ipairs(lovr.headset.getControllers()) do
+    self.controllers[controller] = {
+      index = i,
+      object = controller,
+      model = controller:newModel(),
+      currentPosition = vector(),
+      lastPosition = vector(),
+      activeEntity = nil,
+      drag = {
+        active = false,
+        offset = vector(),
+        counter = 0
+      },
+      scale = {
+        active = false,
+        lastDistance = 0,
+        counter = 0
+      },
+      rotate = {
+        active = false,
+        lastRotation = quaternion(),
+        counter = 0
+      }
+    }
+    table.insert(self.controllers, self.controllers[controller])
+  end
 end
 
 function lovr.controllerpressed(...)
-	lovr.toggleEditor(...)
+	toggleEditor(...)
 	if editor.active then editor:controllerpressed(...) end
 end
 
-function lovr.toggleEditor(controller, button)
+function toggleEditor(controller, button)
 	if button == 'b' and editor.active then
-		editor.active = false
+		closeEditor()
 	elseif button == 'b' then
-		editor.active = true
+		openEditor()
 	end
+end
+
+function closeEditor()
+	toggle.button = 'stop'
+	editor.active = false
+end
+
+function openEditor()
+	toggle.button = 'play'
+	editor.active = true
+end
+
+function drawToggler()
+	local texture = 'art/'..toggle.button..'.png'
+	local x, y, z, size, angle, ax, ay, az =
+	lovr.graphics.plane(texture, x, y, z, size, angle, ax, ay, az)
 end
 
 function lovr.controllerreleased(...)

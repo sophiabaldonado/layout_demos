@@ -9,7 +9,7 @@ Editor.satchelItemSize = .095
 Editor.headPosition = vector()
 
 function Editor:init(level)
-  self.active = true
+  self.active = false
   self:refreshControllers()
   self.level = level
   self.isDirty = false
