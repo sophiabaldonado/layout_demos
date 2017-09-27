@@ -20,6 +20,13 @@ function Editor:init(level)
     active = false,
     controller = {}
   }
+
+	self.tools = {
+		grid = { name = 'Grid', action = 'na', model = lovr.graphics.newModel('art/globe.obj') },
+		snapping = { name = 'Snap', action = 'na', model = lovr.graphics.newModel('art/globe.obj') },
+		selectAll = { name = 'All', action = 'na', model = lovr.graphics.newModel('art/globe.obj') },
+		duplicate = { name = 'Copy', action = 'na', model = lovr.graphics.newModel('art/globe.obj') },
+	}
 end
 
 function Editor:update(dt)
@@ -55,8 +62,9 @@ function Editor:draw()
     else
       lovr.graphics.setColor(255, 255, 255)
     end
-
-    self.abstractController:draw(x, y, z, .5, controller.object:getOrientation())
+		-- local angle = (quaternion():angleAxis(controller.object:getOrientation()) * quaternion():angleAxis(math.pi / 2, vector(1, 0, 0))):getAngleAxis()
+		local angle, ax, ay, az = controller.object:getOrientation()
+    self.abstractController:draw(x, y - .025, z, .5, angle, ax, ay, az)
 
     if controller.rotate.active then
       lovr.graphics.setColor(255, 255, 255)
@@ -64,6 +72,8 @@ function Editor:draw()
       lovr.graphics.cylinder(t.x, t.y, t.z, x, y, z, .003, .003)
     end
   end, ipairs)
+
+	self:drawTools()
 
   local width, depth = lovr.headset.getBoundsDimensions()
   width, depth = math.ceil(width), math.ceil(depth)
@@ -92,6 +102,16 @@ function Editor:draw()
     lovr.graphics.setColor(255, 255, 255)
     lovr.graphics.pop()
   end)
+end
+
+function Editor:drawTools()
+	local toolController = self.controllers[1]
+	local x, y, z = toolController.object:getPosition()
+	local angle, ax, ay, az = toolController.object:getOrientation()
+
+	for key, tool in pairs(self.tools) do
+		tool.model:draw(x, y, z, .35, angle, ax, ay, az)
+	end
 end
 
 function Editor:controllerpressed(controller, button)
